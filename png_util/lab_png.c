@@ -15,5 +15,17 @@ int is_png(U8 *buf, size_t n) {
         }
     }
     return 1; 
+}
+
+// extract from file the data field of the IHDR chunk, to populate a struct data_IHDR
+int get_png_data_IHDR(struct data_IHDR *out, FILE *fp, long offset, int whence) {
+    if (fp == NULL || out == NULL) {
+        return -1; 
+    }
+    size_t seek = fseek(fp, offset, whence); // returns 0 if it successfully moves the file 
+    if (seek != 0) return -1; 
+
+    int items_read = fread(out, DATA_IHDR_SIZE, 1, fp);
+    if (items_read != 1) return -1;
 
 }
