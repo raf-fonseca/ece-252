@@ -21,9 +21,15 @@ int main(int argc, char *argv[])
     U8 buffer[PNG_SIG_SIZE];
     size_t n = fread(buffer, 1, PNG_SIG_SIZE, f);
 
-    int blah = is_png(buffer, n);
+    int isPng = is_png(buffer, n);
 
-    
+    if (!isPng) {
+        printf("%s: Not a PNG file", argv[1]);
+    }
+    // if (isPng) {
+    //     printf("%s: ", argv[1])
+    // }
+
     
     
 }
