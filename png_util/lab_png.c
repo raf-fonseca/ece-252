@@ -1,4 +1,5 @@
 #include "lab_png.h"
+#include <arpa/inet.h>        
 
 int is_png(U8 *buf, size_t n) {
     
@@ -22,10 +23,21 @@ int get_png_data_IHDR(struct data_IHDR *out, FILE *fp, long offset, int whence) 
     if (fp == NULL || out == NULL) {
         return -1; 
     }
-    size_t seek = fseek(fp, offset, whence); // returns 0 if it successfully moves the file 
+    int seek = fseek(fp, offset, whence); // returns 0 if it successfully moves the file 
     if (seek != 0) return -1; 
 
-    int items_read = fread(out, DATA_IHDR_SIZE, 1, fp);
+    size_t items_read = fread(out, DATA_IHDR_SIZE, 1, fp);
     if (items_read != 1) return -1;
 
+    return 0;
 }
+
+int get_png_width(struct data_IHDR *buf)                                                                                                                  
+{                                                                                                                                                         
+    return ntohl(buf->width);                                                                                                                             
+}                                                                                                                                                         
+                                                                                                                                                          
+int get_png_height(struct data_IHDR *buf)                                                                                                                 
+{                                                                                                                                                         
+    return ntohl(buf->height);                                                                                                                            
+}     

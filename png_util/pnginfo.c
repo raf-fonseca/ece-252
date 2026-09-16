@@ -22,14 +22,21 @@ int main(int argc, char *argv[])
     size_t n = fread(buffer, 1, PNG_SIG_SIZE, f);
 
     int isPng = is_png(buffer, n);
-
     if (!isPng) {
-        printf("%s: Not a PNG file", argv[1]);
+        printf("%s: Not a PNG file\n", argv[1]);
+        fclose(f);
+        return -1;
     }
-    // if (isPng) {
-    //     printf("%s: ", argv[1])
-    // }
+    
+    struct data_IHDR ihdr;
+    int png_data = get_png_data_IHDR(&ihdr, f, 16, SEEK_SET);
 
+    if (png_data == -1) {
+        fclose(f);
+        return -1;
+    }
     
+    printf("%s: %d x %d\n", argv[1], get_png_width(&ihdr), get_png_height(&ihdr));   
     
+    fclose(f);
 }
